@@ -1,0 +1,15 @@
+.animated-slide {
+    animation: slideIn 1s ease forwards;
+  }
+  
+  @keyframes slideIn {
+    from {
+      max-height: 0;
+      opacity: 0;
+    }
+    to {
+      max-height: 1000px; /* Set to the maximum height you expect the dropdown to be */
+      opacity: 1;
+    }
+  }
+  
