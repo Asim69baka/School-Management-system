@@ -13,6 +13,7 @@ import Dashboard from './Dash-pages/Dashboard';
 import Layout from './component/sidebar_Dash';
 import DashTeachers from './Dash-pages/InformationAdd/DashTeachers';
 import DashStudents from './Dash-pages/InformationAdd/DashStudents';
+import Students from './Information Desk/Students';
 
 
 const App = () => {
@@ -39,6 +40,7 @@ const AppContent = () => {
         <Route path="/Admission" element={<Admission />} />
         <Route path="/verify" element={<OTP />} />
         <Route path="/Teachers" element={<Teachers />} />
+        <Route path='/Students' element={<Students />} />
         <Route path="/Dashboard/*" element={<DashboardWithoutNavbar />} />
       </Routes>
     </>

@@ -6,15 +6,16 @@ const StackList = () => {
   const [employees, setEmployees] = useState([]);
   const [expandedRows, setExpandedRows] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize,] = useState(5);
+  const [pageSize] = useState(5);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, pageSize]); // <-- Include currentPage and pageSize in the dependency array
+  }, [currentPage, pageSize, searchQuery]); // Include searchQuery in the dependency array
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/getDataTeachers?page=${currentPage}&pageSize=${pageSize}`);
+      const response = await axios.get(`http://localhost:8000/api/getDataTeachers?page=${currentPage}&pageSize=${pageSize}&search=${searchQuery}`);
       setEmployees(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -29,14 +30,31 @@ const StackList = () => {
 
   const indexOfLastItem = currentPage * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
-  const currentItems = employees.slice(indexOfFirstItem, indexOfLastItem);
+  const filteredEmployees = employees.filter(employee =>
+    employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const currentItems = filteredEmployees.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1); // Reset current page when search query changes
+  };
 
   return (
     <div className="container mx-auto">
       <h1 className="text-2xl font-bold mb-4">Employee Stack List</h1>
       <div className="overflow-x-auto">
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          />
+        </div>
         <table className="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
           <thead className="bg-gray-50">
             <tr>
@@ -83,7 +101,7 @@ const StackList = () => {
         <div className="flex justify-center my-4">
           <ul className="flex list-none">
             {employees.length > pageSize &&
-              Array.from({ length: Math.ceil(employees.length / pageSize) }).map((_, index) => (
+              Array.from({ length: Math.ceil(filteredEmployees.length / pageSize) }).map((_, index) => (
                 <li key={index} className="mx-1">
                   <button
                     onClick={() => paginate(index + 1)}

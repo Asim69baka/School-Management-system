@@ -4,8 +4,8 @@ import Nalam from '../assets/Nalam.jpg';
 import './sidebar.css';
 
 const Users = [
-  { name: 'Teacher', href: '/teachers' },
-  { name: 'Student', href: '/academics/students' },
+  { name: 'Teacher', href: '/Teachers' },
+  { name: 'Student', href: '/Students' },
 ];
 
 const Alumni = [
